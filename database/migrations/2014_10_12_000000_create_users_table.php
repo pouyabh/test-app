@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('lastname');
             $table->string('phonenumber');
-            $table->string('national_code');
+            $table->string('national_code')->unique();
             $table->enum('gender', UserGender::values());
             $table->string('image_path')->nullable();
             $table->string('email')->unique();
