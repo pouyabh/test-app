@@ -19,6 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'lastname',
+        'phonenumber',
+        'national_code',
+        'gender',
+        'image_path',
         'email',
         'password',
     ];
@@ -42,4 +47,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
+    /**
+     * relationships section
+     */
+
+    /**
+     * attributes section
+     */
+
+    /**
+     * scopes section
+     */
+
+
+    /**
+     * custom functions section
+     */
 }
