@@ -1,2 +1,2 @@
 @extends('layouts.admin.master')
-@section('title','Users')
+@section('title','Show A User')
