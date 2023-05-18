@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin\Comment;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\admin\comment\ReplyRequest;
+use App\Http\Requests\admin\comment\UpdateCommentRequest;
 use App\Models\Comment;
-use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
@@ -13,24 +14,9 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::all();
+        $comments = Comment::all()->sortByDesc('created_at');
+
         return view('admin.comment.index', compact('comments'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -38,7 +24,7 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
+        return view('admin.comment.show', compact('comment'));
     }
 
     /**
@@ -46,22 +32,29 @@ class CommentController extends Controller
      */
     public function edit(Comment $comment)
     {
-        //
+        return view('admin.comment.edit', compact('comment'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comment $comment)
+    public function update(UpdateCommentRequest $request, Comment $comment)
     {
-        //
+        $comment->update([
+            'status' => $request->status
+        ]);
+
+        return redirect()->route('admin.comments.index')->with([ 'message' => __('messages.success')]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Comment $comment)
+    public function reply(Comment $comment, ReplyRequest $request)
     {
-        //
+        Comment::create([
+            'parent_id'     => $comment->id,
+            'admin_id'      => auth()->user()->id,
+            'text'          => $request->text
+        ]);
+
+        return redirect()->back()->with([ 'message' => __('messages.success')]);
     }
 }

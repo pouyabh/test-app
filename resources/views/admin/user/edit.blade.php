@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-12 " style="padding-left: 120px">
                 <form action="{{  route('admin.users.update',$user) }}" method="POST" enctype="multipart/form-data">
-@method('PATCH')
+                    @method('PATCH')
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul>

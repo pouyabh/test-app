@@ -35,6 +35,7 @@ Route::prefix('admin/')->group(function () {
 
         Route::resource('users', UserController::class);
         Route::resource('comments', CommentController::class);
+        Route::post('/comments/reply/{comment}', [CommentController::class,'reply'])->name('comments.reply');
 
         Route::view('/dashboard', 'admin.main')->name('dashboard');
     });

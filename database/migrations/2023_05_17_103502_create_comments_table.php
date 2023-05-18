@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\CommentStatus;
+use App\Models\Admin;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -16,11 +18,12 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignIdFor(User::class, 'admin_id')->nullable()->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignIdFor(Comment::class, 'parent_id');
+            $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Admin::class,)->nullable()->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Comment::class, 'parent_id')->nullable();
 
             $table->text('text');
+            $table->enum('status', CommentStatus::values())->default(CommentStatus::ACTIVE->value);
 
             $table->timestamps();
         });
