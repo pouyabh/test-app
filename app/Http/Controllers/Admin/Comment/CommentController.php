@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Comment;
 
+use App\Actions\Comment\{GetAllCommentsAction, StoreReplyAction, UpdateCommentAction};
+use App\Actions\LogActivity\StoreLogActivityAction;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\admin\comment\ReplyRequest;
-use App\Http\Requests\admin\comment\UpdateCommentRequest;
+use App\Http\Requests\admin\comment\{
+    ReplyRequest,
+    UpdateCommentRequest
+};
 use App\Models\Comment;
 
 class CommentController extends Controller
@@ -14,7 +18,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::all()->sortByDesc('created_at');
+        $comments = app(GetAllCommentsAction::class)->run();
 
         return view('admin.comment.index', compact('comments'));
     }
@@ -40,21 +44,19 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
-        $comment->update([
-            'status' => $request->status
-        ]);
+        app(UpdateCommentAction::class)->run(request: $request, comment: $comment);
 
-        return redirect()->route('admin.comments.index')->with([ 'message' => __('messages.success')]);
+        app(StoreLogActivityAction::class)->run(subject: 'comment status updated successfully');
+
+        return redirect()->route('admin.comments.index')->with(['message' => __('messages.success')]);
     }
 
     public function reply(Comment $comment, ReplyRequest $request)
     {
-        Comment::create([
-            'parent_id'     => $comment->id,
-            'admin_id'      => auth()->user()->id,
-            'text'          => $request->text
-        ]);
+        app(StoreReplyAction::class)->run(request: $request, comment: $comment);
 
-        return redirect()->back()->with([ 'message' => __('messages.success')]);
+        app(StoreLogActivityAction::class)->run(subject: 'reply sent successfully');
+
+        return redirect()->back()->with(['message' => __('messages.success')]);
     }
 }

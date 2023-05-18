@@ -34,7 +34,7 @@
                                          width="60"
                                          height="60"/>
                                     <div>
-                                        <h6 class="fw-bold text-primary mb-1">{{ $comment->user->name  }}</h6>
+                                        <h6 class="fw-bold text-primary mb-1">{{ $comment->user->name ?? null }}</h6>
                                         <p class="text-muted small mb-0">
                                             Shared publicly - {{ $comment->created_at->diffForHumans() }}
                                         </p>
@@ -46,7 +46,7 @@
                                 </p>
                             </div>
 
-                            @foreach($comment->replies as $reply)
+                            @forelse($comment->replies as $reply)
                                 <div>
                                     <div class="card-body ">
                                         <div class="d-flex flex-start align-items-center ">
@@ -56,7 +56,7 @@
                                                  width="60"
                                                  height="60"/>
                                             <div>
-                                                <h6 class="fw-bold text-primary mb-1 ">{{ $reply->admin->name  }}</h6>
+                                                <h6 class="fw-bold text-primary mb-1 ">{{ $reply->admin->name ?? null  }}</h6>
                                                 <p class="text-muted small mb-0">
                                                     Shared publicly - {{ $reply->created_at->diffForHumans() }}
                                                 </p>
@@ -68,7 +68,9 @@
                                         </p>
                                     </div>
                                 </div>
-                            @endforeach
+                            @empty
+                                <p>Empty</p>
+                            @endforelse
 
                             <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                                 <div class="d-flex flex-start w-100">

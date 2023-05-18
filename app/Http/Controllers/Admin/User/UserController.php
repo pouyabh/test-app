@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Http\Requests\admin\user\{
-    StoreUserRequest,
-    UpdateUserRequest
+use App\Actions\LogActivity\StoreLogActivityAction;
+use App\Actions\User\{
+    GetAllUsersAction,
+    StoreUserAction,
+    UpdateUserAction
 };
+use App\Http\Controllers\Controller;
+use App\Http\Requests\admin\user\{StoreUserRequest, UpdateUserRequest};
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -16,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all()->sortByDesc('created_at');
+        $users = app(GetAllUsersAction::class)->run();
         return view('admin.user.index', compact('users'));
     }
 
@@ -25,18 +28,11 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        User::create([
-            'name'          => $request->name,
-            'lastname'      => $request->lastname,
-            'phonenumber'   => $request->phonenumber,
-            'national_code' => $request->national_code,
-            'gender'        => $request->gender,
-            'email'         => $request->email,
-            'password'      => $request->password,
-            'image_path'    => $request->file('thumbnail')? $request->file('thumbnail')->store('thumbnails','public') : null,
-        ]);
+        $user = app(StoreUserAction::class)->run(request: $request);
 
-        return redirect()->back()->with([ 'message' => __('messages.success')]);
+        app(StoreLogActivityAction::class)->run(subject: 'user created successfully');
+
+        return redirect()->back()->with(['message' => __('messages.success')]);
     }
 
     /**
@@ -68,19 +64,12 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        $user->update([
-                'name'          => $request->name,
-                'lastname'      => $request->lastname,
-                'phonenumber'   => $request->phonenumber,
-                'national_code' => $request->national_code,
-                'gender'        => $request->gender,
-                'email'         => $request->email,
-                'password'      => $request->has('password') ? bcrypt($request->password):$user->password,
-                'image_path'    => $request->file('thumbnail') ? $request->file('thumbnail')->store('thumbnails','public') : $user->image_path,
-        ]);
 
-        return redirect()->back()->with([ 'message' => __('messages.success')]);
+        app(UpdateUserAction::class)->run(request: $request, user: $user);
 
+        app(StoreLogActivityAction::class)->run(subject: 'user updated successfully');
+
+        return redirect()->back()->with(['message' => __('messages.success')]);
     }
 
     /**
@@ -89,6 +78,9 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->deleteOrFail();
+
+        app(StoreLogActivityAction::class)->run(subject: 'user deleted successfully');
+
         return redirect()->back();
     }
 }

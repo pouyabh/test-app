@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -182,6 +182,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'LogActivity' => App\Helpers\LogActivity::class,
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 

@@ -16,18 +16,18 @@
                 <img src="{{  asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
 
-                <div class="info">
-                    <a href="#" class="d-block">{{ Auth::user()->name }}</a>
-                    <br>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <x-dropdown-link :href="route('logout')"
-                                         onclick="event.preventDefault();
+            <div class="info">
+                <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+                <br>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <x-dropdown-link :href="route('logout')"
+                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                            {{ __('Log Out') }}
-                        </x-dropdown-link>
-                    </form>
-                </div>
+                        {{ __('Log Out') }}
+                    </x-dropdown-link>
+                </form>
+            </div>
 
         </div>
 
@@ -83,18 +83,21 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.comments.create') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Create a Comment</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{ route('admin.comments.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List of Comments</p>
                             </a>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.log.activities') }}" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Log Activity
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
                 </li>
 
             </ul>

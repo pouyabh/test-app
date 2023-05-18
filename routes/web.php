@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Comment\CommentController;
 use App\Http\Controllers\Admin\User\UserController;
+use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,8 +36,9 @@ Route::prefix('admin/')->group(function () {
 
         Route::resource('users', UserController::class);
         Route::resource('comments', CommentController::class);
-        Route::post('/comments/reply/{comment}', [CommentController::class,'reply'])->name('comments.reply');
 
+        Route::post('/comments/reply/{comment}', [CommentController::class, 'reply'])->name('comments.reply');
+        Route::get('/log/activities', [LogActivityController::class, 'index'])->name('log.activities');
         Route::view('/dashboard', 'admin.main')->name('dashboard');
     });
 
