@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Comment;
 
+use App\Events\StoreCommentEvent;
 use App\Actions\Comment\{GetAllCommentsAction, StoreReplyAction, UpdateCommentAction};
 use App\Actions\LogActivity\StoreLogActivityAction;
 use App\Http\Controllers\Controller;
@@ -56,6 +57,9 @@ class CommentController extends Controller
         app(StoreReplyAction::class)->run(request: $request, comment: $comment);
 
         app(StoreLogActivityAction::class)->run(subject: 'reply sent successfully');
+
+        //send notification for user
+        event(new StoreCommentEvent($comment));
 
         return redirect()->back()->with(['message' => __('messages.success')]);
     }
