@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\ActivityLog\LogActivityController;
 use App\Http\Controllers\Admin\Comment\CommentController;
 use App\Http\Controllers\Admin\User\UserController;
-use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 

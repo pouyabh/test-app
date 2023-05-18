@@ -39,7 +39,13 @@ class LogActivityJob implements ShouldQueue
      */
     public function handle(): void
     {
-        LogActivity::addToLog(subject: $this->subject, adminID: $this->adminID, method: $this->method, ip: $this->ip
-            , agent: $this->agent, url: $this->url);
+        LogActivity::addToLog(
+            subject: $this->subject,
+            adminID: $this->adminID,
+            method: $this->method,
+            ip: $this->ip
+            , agent: $this->agent,
+            url: $this->url
+        );
     }
 }

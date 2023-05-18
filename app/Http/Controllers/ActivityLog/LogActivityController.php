@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ActivityLog;
 
 
 use App\Actions\LogActivity\GetAllLogActivitiesAction;
-use App\Helpers\LogActivity;
+use App\Http\Controllers\Controller;
 
 class LogActivityController extends Controller
 {
