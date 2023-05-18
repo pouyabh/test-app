@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignIdFor(Admin::class,)->nullable()->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Admin::class,)->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(Comment::class, 'parent_id')->nullable();
 
             $table->text('text');
